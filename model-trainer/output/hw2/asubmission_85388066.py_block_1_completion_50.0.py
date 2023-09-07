@@ -1,0 +1,6 @@
+flour = input("How much flour do you need?")
+sugar = input("How much sugar do you need?")
+eggs = input("How many dozen eggs do you need?")
+flour = float(flour)
+sugar = float(sugar)
+eggs = float(eggs)
