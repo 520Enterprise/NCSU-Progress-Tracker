@@ -85,6 +85,16 @@ var assignments = {
 
 var codetime: CodeTime;
 
+function generateProgressBar(completionPercentage: number): string {
+    const totalBars = 10;
+    const completedBars = Math.round((completionPercentage / 100) * totalBars);
+
+    // Create the progress bar string
+    const progressBar = '*'.repeat(completedBars) + '_'.repeat(totalBars - completedBars);
+
+    return progressBar;
+}
+
 function updateStatusBarWithFunctionNames(
     document: vscode.TextDocument,
     position: vscode.Position
@@ -122,29 +132,6 @@ function updateStatusBarWithFunctionNames(
 
     const model_loaderPath = path.join(__dirname, 'model_loader.py');
 
-    // 调用 Python 脚本来加载模型并得出结果
-    // test all model include lasso, ridge, random_forest, svr
-    
-
-    // const modelFilePath = path.join(__dirname, 'model', homeworkName, homeworkName + '_completion_lasso_model.joblib');
-    // execFile('python', [model_loaderPath, modelFilePath, document.fileName], (error: any, stdout: any, stderr: any) => {
-    //     console.log('Executing Python script...');
-    //     console.log(`stdout: ${stdout}`);
-    //     console.log(`stderr: ${stderr}`);
-    
-    //     if (error) {
-    //         console.error(`Error executing Python script: ${error}`);
-    //         return;
-    //     }
-    
-    //     // 解析 Python 脚本输出的结果
-    //     completionPercentage = parseFloat(stdout.trim());
-    //     console.log(`Completion: ${completionPercentage}%`);
-    
-    //     // 在状态栏显示结果
-        
-    // });
-
 
     // path is like model/hw1/hw1_completion_lasso_model.joblib
     const models = ['lasso', 'ridge', 'random_forest', 'svr'];
@@ -177,7 +164,9 @@ function updateStatusBarWithFunctionNames(
                 console.log(`Median completion: ${medianCompletion}%`);
                 // 保留两位小数
                 medianCompletion = Math.round(medianCompletion * 100) / 100;
-                vscode.window.setStatusBarMessage(`Completion: ${medianCompletion}%`);
+                const progressBar = generateProgressBar(completionPercentage);
+                console.log(`Progress: ${progressBar}`);
+                vscode.window.setStatusBarMessage(`Progress: ${progressBar}`, 5000);
             }
     });
 }}
@@ -188,9 +177,6 @@ function renderProgressBar(percentage: number): string {
     return '*'.repeat(completed) + '_'.repeat(remaining);
 }
 
-const percentage = 60;
-const progressBar = renderProgressBar(percentage);
-console.log(progressBar); // Output: "******____"
 
 export function activate(context: vscode.ExtensionContext) {
     console.log(
