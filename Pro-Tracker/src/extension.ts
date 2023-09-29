@@ -193,14 +193,14 @@ export function activate(context: vscode.ExtensionContext) {
     let userName = codetime.getUserName();
     console.log("!!!!! Log in as " + userName);
 
-    vscode.workspace.onDidChangeTextDocument((event) => {
-        console.log("onDidChangeTextDocument");
+    vscode.workspace.onDidSaveTextDocument((document) => {
+        console.log("onDidSaveTextDocument");
         if (
-            event.document.languageId === "python" &&
-            event.document === vscode.window.activeTextEditor?.document
+            document.languageId === "python" &&
+            document === vscode.window.activeTextEditor?.document
         ) {
             const position = vscode.window.activeTextEditor.selection.start;
-            updateStatusBarWithFunctionNames(event.document, position);
+            updateStatusBarWithFunctionNames(document, position);
         }
     });
 
@@ -350,57 +350,8 @@ export function activate(context: vscode.ExtensionContext) {
             });
         }); // readFile(terminalUri)
 
-        // automatically check assignment progress
-        // vscode.window.withProgress(
-        //     { location: vscode.ProgressLocation.Window, title: "Assignment 1" },
-        //     (p) => {
-        //         vscode.window.showInformationMessage(
-        //             "Estimating your assignment progress..."
-        //         );
-        //         return new Promise((resolve, reject) => {
-        //             p.report({ message: "Start working..." });
-        //             let count = 0;
-        //             let handle = setInterval(() => {
-        //                 count++;
-        //                 p.report({ message: "Done " + count + "%" });
-        //                 if (count >= 100) {
-        //                     clearInterval(handle);
-        //                     resolve(1);
-        //                     vscode.window.showInformationMessage("Assignment completed!");
-        //                 }
-        //             }, 500);
-        //         });
-        //     }
-        // );
+
     }
-
-    // let disposable = vscode.commands.registerCommand(
-    //     "coding-time-tracker.check",
-    //     () => {
-    //         vscode.window.showInformationMessage(
-    //             "Estimating the assignment progress..."
-    //         );
-    //         vscode.window.withProgress(
-    //             { location: vscode.ProgressLocation.Window, title: "Assignment 10" },
-    //             (p) => {
-    //                 return new Promise((resolve, reject) => {
-    //                     p.report({ message: "Start working..." });
-    //                     let count = 0;
-    //                     let handle = setInterval(() => {
-    //                         count++;
-    //                         p.report({ message: "Done " + count * 10 + "%" });
-    //                         if (count >= 10) {
-    //                             clearInterval(handle);
-    //                             resolve(1);
-    //                         }
-    //                     }, 1000);
-    //                 });
-    //             }
-    //         );
-    //     }
-    // );
-
-    // context.subscriptions.push(disposable);
 }
 
 export function deactivate() {
